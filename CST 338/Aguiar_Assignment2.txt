@@ -1,0 +1,519 @@
+/*******************************************************************************
+ Name: Bryan Aguiar
+ Due Date: 11/10/2020
+ Assignment: Assignment 2 - Casino
+ Description:
+    The program is a Casino slot machine program. It uses two classes with 
+    Assig2 being the only one with a main. The ThreeString Class generates space
+    for the three slots using three strings. The class also stores pulls and
+    generates the total winnings and pulls. The bulk of the work is done in the
+    Assig2 class. This class retrieves the input from the user as well as has a
+    function to display results to the user. Main also displays some information
+    to the user when necessary. Strings are randomized using the math.random() 
+    function and some else if statements. The calculation for how much the user
+    wins in the current pull is also calculated in this class. Main doesn't
+    do much and relies on function calls to do most of the work.
+
+ ******************************************************************************/
+// Only import needed is scanner 
+import java.util.Scanner;
+
+// Assig2 public class with main
+public class Assig2
+{
+   // initialize scanner before creating a class function for it
+   static Scanner keyboard = new Scanner(System.in);
+   
+   // getBet() function who's job is just to get the input and return it to the
+   // user
+   static int getBet()
+   {
+      int bet = 0;
+      
+      bet = keyboard.nextInt();
+      
+      return bet;
+   }
+   
+   // pull() function. Function that creates an instance of ThreeString and 
+   // generates the three random strings using the randString helper function
+   //and returns the object with the strings to the user.
+   static ThreeString pull()
+   {
+      ThreeString pullFunction = new ThreeString();
+      
+      // wanted to use the boolean nature of setString so if it fails for any
+      // reason I want the program to quit.
+      if(!pullFunction.setString1(randString()))
+      {
+         System.exit(-1);
+      }
+      
+      if(!pullFunction.setString2(randString()))
+      {
+         System.exit(-1);
+      }
+      
+      if(!pullFunction.setString3(randString()))
+      {
+         System.exit(-1);
+      }
+      
+      return pullFunction;
+   }
+   
+   
+   // randString() is a private function that uses the math.random function
+   // to generate a random number and return a string to the caller.
+   private static String randString()
+   {
+      // generate a random number. Math.random() returns a double between 0 and
+      // 1.0. So multiply that by 100 to get a random number between 0 and 100.
+      double randNum = Math.random() * 100;
+      
+      // Using 0 to 100 as a guideline. Separate the percentages of each string
+      // happening and use else if statements to generate the chance for each
+      // Occurring.
+      if (randNum >=0 && randNum <= 12.5)
+      {
+         return "BAR";
+      }
+      else if (randNum > 12.5 && randNum <= 25)
+      {
+         return "7";
+      }
+      else if (randNum > 25 && randNum <= 75)
+      {
+         return "space";
+      }
+      
+      // Cherries is else here because it is the remainder of what's between 75
+      // and 100 seeing as 100 is the highest the number can go.
+      else
+      {
+         return "cherries";
+      }
+   }
+   
+   // getPayMultiplier(object object) is a function that receives a ThreeString
+   // object and returns a multiplier based on the results of the three strings.
+   static int getPayMultiplier(ThreeString thePull)
+   {
+      // test cherries first since i figured it has the most variance. Also 
+      // starting cherries guarantees a winning chance.
+      if (thePull.getString1().equals("cherries"))
+      {
+         // second cherries here guarantees at least 15 return in multiplier no
+         // matter the result
+         if (thePull.getString2().equals("cherries"))
+         {
+            // getting the third cherry gives maximum multiplier for three 
+            // cherries
+            if (thePull.getString3().equals("cherries"))
+            {
+               return 30;
+            }
+            else
+            {
+               return 15;
+            }
+         }
+         else
+         {
+            return 5;
+         }
+      }
+      // a repeating sequence of BAR is the only victorious outcome here so just
+      // check if the whole string is equal to BAR.
+      else if (thePull.toString().equals("BAR BAR BAR"))
+      {
+         return 50;
+      }
+      
+      // same as Bar just with 7's instead
+      else if (thePull.toString().equals("7 7 7"))
+      {
+         return 100;
+      }
+      
+      // any other combination is a failure.
+      else
+      {
+         return 0;
+      }
+   }
+   
+   // display() is the only function which displays to the user. Depending on
+   // the result the message which is displayed varies
+   static void display(ThreeString thePull, int winnings)
+   {
+      // this segment prints out the a processing message and the three strings
+      // they got in the order they got them
+      System.out.println("whirrrrrr .... and your pull is ...");
+      System.out.printf(" %s%n", thePull.toString());
+      
+      // Losing message. If winnings is 0 user obviously lost
+      if(winnings == 0)
+      {
+         System.out.printf("sorry, you lost %n%n");
+      }
+      
+      // Winning message. It's the only other possible outcome.
+      else
+      {
+         System.out.printf("congratulations, you win: %d%n%n", winnings);
+      }
+   }
+   
+   // beginning of main function
+   public static void main(String[] args) 
+   {
+      // Create three local variables. An object to use ThreeString functions. 
+      // And two ints one for storing the current bet and the other for storing 
+      // the amount won on the current Bet.
+      ThreeString pullString = new ThreeString();
+      int currentBet;
+      int currentWinnings;
+      
+      // Using a do while loop because this process is guaranteed to happen once
+      do
+      {
+         // Request the bet from the user and then use the getBet() function to
+         // obtain the input.
+         System.out.print("How much would you like to bet (1 - 100)");
+         System.out.print(" or 0 to quit? ");
+         currentBet = getBet();
+         
+         // Check to see if the currentBet is 0 and if so end the run and print
+         // message to user using necessary functions. I made a pullWinnings
+         // function to print each pull and the amounts won. toStringWinnings is
+         // called at the end to display the total won by the user.
+         if(currentBet == 0)
+         {
+            System.out.println("Thanks for playing at the Casino!");
+            System.out.println("Your individual winnings were:");
+            System.out.println(pullString.pullWinnings());
+            System.out.printf("Your total winnings were: %s",
+                  pullString.toStringWinnings());
+            break; // only way to break the loop
+         }
+         // Check to see if the bet is between our min and max. If not, nothing
+         // happens and the program loops back. Otherwise, a call to the pull()
+         // function is made. The results are then passed on to the 
+         // getPayMultiplier() function and the multiplied by the current bet.
+         // the amount is then passed onto my current winnings variable. The
+         // end result is displayed to the user.
+         else if(currentBet > 0 && currentBet <= 100)
+         {
+            pullString = pull();
+            currentWinnings = currentBet * getPayMultiplier(pullString);
+            // exits program if for some reason current winnings returns false
+            if(!pullString.saveWinnings(currentWinnings))
+            {
+               System.exit(-1);
+            }
+            display(pullString, currentWinnings);
+         }
+      } while(true); // infinite loop where the only way to escape is through
+      // the break statement.
+
+      // don't forget to close the scanner
+      keyboard.close();
+   } //end of main
+} // end of Assig2
+
+// ThreeString class
+class ThreeString
+{
+   // Create the 7 variables according to specs.
+   private String string1, string2, string3; // stores random strings in order
+   public static final int MAX_LEN = 20; // Maximum string length
+   public static final int MAX_PULLS = 40; // Max amount of pulls
+   private static int[] pullWinnings = new int[MAX_PULLS]; // stores winnings
+   private static int numPulls = 0; // counts what pull user is currently on
+   
+   // A default constructor which empties the strings
+   ThreeString()
+   {         
+     // just putting this in case set string fails that it exits the program. 
+     if(!setString1(""))
+     {
+        System.exit(-1);
+     }
+     
+     if(!setString2(""))
+     {
+        System.exit(-1);
+     }
+     
+     if(!setString3(""))
+     {
+        System.exit(-1);
+     }
+   }
+   
+   // checks to see if string input is valid
+   private boolean validString(String str)
+   {
+      if (str != null && str.length() <= MAX_LEN)
+      {
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+         
+   }
+   
+   // mutator for first string. Checks for string validity and returns true or
+   // false if successful or not.
+   public boolean setString1(String str)
+   {
+      if (validString(str))
+      {
+         string1 = str;
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+   
+   // same as mutator for first string but for the second string
+   public boolean setString2(String str)
+   {
+      if (validString(str))
+      {
+         string2 = str;
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+   
+   // same as mutator for first string but for the third string.
+   public boolean setString3(String str)
+   {
+      if (validString(str))
+      {
+         string3 = str;
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+   
+   // I like grouping similar functions together so these just return a string
+   // when called. The string you get depends on the function you call.
+   public String getString1()
+   {
+      return string1;
+   }
+   public String getString2()
+   {
+      return string2;
+   }
+   public String getString3()
+   {
+      return string3;
+   }
+   
+   // pullWinnings() iterates through the pulls and returns each pull as one
+   // string. This is a function that I added on my own for simplicity.
+   public String pullWinnings()
+   {
+      String winnings = "";
+      
+      for(int i = 0; i < numPulls; i++)
+      {
+         winnings += pullWinnings[i] + " ";
+      }
+      
+      return winnings;
+   }
+   
+   // Returns the three strings as one string.
+   public String toString()
+   {
+      String string1st, string2nd, string3rd, stringFinal;
+      
+      string1st = getString1();
+      string2nd = getString2();
+      string3rd = getString3();
+      
+      stringFinal = "";
+      stringFinal = string1st + " " + string2nd + " " + string3rd;
+      return stringFinal;
+   }
+   
+   // iterates through the pulls based on the current number of pulls and saves
+   // the winnings in the current pull. If exceeds max and unable to save. An
+   // error is returned.
+   public boolean saveWinnings(int winnings)
+   {
+      if (pullWinnings[numPulls] <= MAX_PULLS)
+      {
+         pullWinnings[numPulls] = winnings;
+         numPulls++;
+         return true;
+      }
+      
+      else
+      {
+         return false;
+      }
+   }
+   
+   // Iterates through pulls and returns total of winnings to caller.
+   public String toStringWinnings()
+   {
+      String totalWinnings = "";
+      int winningsCalculator = 0;
+      
+      for(int i = 0; i <= numPulls; i++)
+      {
+         winningsCalculator += pullWinnings[i];
+      }
+      
+      totalWinnings = "$" + winningsCalculator;
+      return totalWinnings;
+   }
+}  // end of ThreeString class.
+
+
+/******************************Output******************************************
+
+Run #1:
+
+How much would you like to bet (1 - 100) or 0 to quit? 5
+whirrrrrr .... and your pull is ...
+ space 7 cherries
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 25
+whirrrrrr .... and your pull is ...
+ cherries cherries space
+congratulations, you win: 375
+
+How much would you like to bet (1 - 100) or 0 to quit? 555
+How much would you like to bet (1 - 100) or 0 to quit? 62
+whirrrrrr .... and your pull is ...
+ space space space
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 1
+whirrrrrr .... and your pull is ...
+ space 7 space
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 99
+whirrrrrr .... and your pull is ...
+ space space cherries
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 100
+whirrrrrr .... and your pull is ...
+ BAR cherries BAR
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 99
+whirrrrrr .... and your pull is ...
+ space space BAR
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 100
+whirrrrrr .... and your pull is ...
+ space cherries cherries
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 100
+whirrrrrr .... and your pull is ...
+ cherries space space
+congratulations, you win: 500
+
+How much would you like to bet (1 - 100) or 0 to quit? 88
+whirrrrrr .... and your pull is ...
+ space space cherries
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 65
+whirrrrrr .... and your pull is ...
+ 7 cherries space
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 74
+whirrrrrr .... and your pull is ...
+ space space cherries
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 36
+whirrrrrr .... and your pull is ...
+ space cherries cherries
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 25
+whirrrrrr .... and your pull is ...
+ space BAR BAR
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 42
+whirrrrrr .... and your pull is ...
+ space cherries cherries
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 74
+whirrrrrr .... and your pull is ...
+ BAR space space
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 53
+whirrrrrr .... and your pull is ...
+ space 7 BAR
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 22
+whirrrrrr .... and your pull is ...
+ space space cherries
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 111
+How much would you like to bet (1 - 100) or 0 to quit? 123
+How much would you like to bet (1 - 100) or 0 to quit? 155
+How much would you like to bet (1 - 100) or 0 to quit? 66
+whirrrrrr .... and your pull is ...
+ 7 BAR space
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 77
+whirrrrrr .... and your pull is ...
+ space cherries cherries
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 88
+whirrrrrr .... and your pull is ...
+ 7 space space
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 99
+whirrrrrr .... and your pull is ...
+ space cherries cherries
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 54
+whirrrrrr .... and your pull is ...
+ BAR space space
+sorry, you lost 
+
+How much would you like to bet (1 - 100) or 0 to quit? 0
+Thanks for playing at the Casino!
+Your individual winnings were:
+0 375 0 0 0 0 0 0 500 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+Your total winnings were: $875
+
+*******************************************************************************/

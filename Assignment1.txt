@@ -1,0 +1,116 @@
+Aguiar_Assignment1.txt
+/******************************************************************************
+ 
+ Name: Bryan Aguiar
+ Due Date: 11/3/2020
+ Assignment: Assignment 1 - String Manipulation
+ Description:
+    This assignment requires the usage of the string class to receive a first
+    and last name from a user. The program then assigns the name to a third
+    string names fullName. The fullName is displayed with a white space between
+    the names. The length as well as upper lower case variations are also 
+    displayed. The second portion of the assignment requires the usage of the
+    Decimal Format Class. The user is asked for an input between two static
+    variables to three decimal places and then the variable is returned rounded
+    and to the format required using the decimal format class.
+    
+*******************************************************************************/
+
+// Import Decimal Format and Scanner to allow for use
+import java.text.DecimalFormat;
+import java.util.Scanner;
+
+public class Assignment1
+{
+   //declare static MIN_HOURS and MAX_HOURS here 
+   public static final int MIN_HOURS = 12;
+   public static final int MAX_HOURS = 20;
+   
+   public static void main(String[] args) 
+   {
+      //create variables needed for string portion of assignment
+      String firstName = "";
+      String lastName = "";
+      String fullName = "";
+      //integer created for non-white space calculation
+      int fullNameLength = 0;
+      //double created for hoursWorked
+      double hoursWorked = 0;
+      //Create an object for decimal format with format required for assignment
+      DecimalFormat pattern00dot0 = new DecimalFormat("00.0");
+      //Create an object for scanner to receive inputs from user
+      Scanner keyboard = new Scanner(System.in);
+      
+      /* Request First and Last Name from User and assign them to respective
+       variables.*/
+      System.out.println("Print First Name with First Letter Capitalized: ");
+      firstName = keyboard.nextLine();
+      System.out.println("Print Last Name with First Letter Capitalized: ");
+      lastName = keyboard.nextLine();
+      // Request variables for hours worked from user and assign to variable
+      System.out.print("Print Hours worked this week between ");
+      System.out.print(MIN_HOURS);
+      System.out.print(" hours and ");
+      System.out.print(MAX_HOURS);
+      System.out.println(" hours up to 3 decimal points:");
+      hoursWorked = keyboard.nextDouble();
+      
+      // Good practice to close scanner when completed with inputs
+      keyboard.close();
+      
+      // Concatenate first and last name with a space and assign to fullName
+      fullName = firstName + " " + lastName;
+      // Calculate length of fullName with a minus one to remove white space
+      fullNameLength = fullName.length() - 1;
+      /* Display results to user for fullName, length with and without white
+       space*/
+      System.out.printf("Your full name is: %s%n", fullName);
+      System.out.printf("Length of full name with white space: %d%n",
+         fullName.length());
+      System.out.printf("Length of full name without white space: %d%n",
+         fullNameLength);
+      /* Display fullName with upper and lower case lettering using required
+       functions*/
+      System.out.printf("Full name capitalized: %s%n", fullName.toUpperCase());
+      System.out.printf("Full name lower case: %s%n", fullName.toLowerCase());
+      
+      /* Display hours worked using Decimal Format object to format double and
+       round the double as well.*/
+      System.out.print("Hours worked this week rounded to 1 decimal point: ");
+      System.out.print(pattern00dot0.format(hoursWorked));
+      System.out.println(" hours");
+   }
+
+}
+
+/* *********************************Output*************************************
+
+RUN #1:
+Print First Name with First Letter Capitalized: 
+Bryan
+Print Last Name with First Letter Capitalized: 
+Aguiar
+Print Hours worked this week between 12 hours and 20 hours up to 3 decimal points:
+14.567
+Your full name is: Bryan Aguiar
+Length of full name with white space: 12
+Length of full name without white space: 11
+Full name capitalized: BRYAN AGUIAR
+Full name lower case: bryan aguiar
+Hours worked this week rounded to 1 decimal point: 14.6 hours
+
+RUN #2:
+Print First Name with First Letter Capitalized: 
+Steve
+Print Last Name with First Letter Capitalized: 
+Rogers
+Print Hours worked this week between 12 hours and 20 hours up to 3 decimal points:
+19.647
+Your full name is: Steve Rogers
+Length of full name with white space: 12
+Length of full name without white space: 11
+Full name capitalized: STEVE ROGERS
+Full name lower case: steve rogers
+Hours worked this week rounded to 1 decimal point: 19.6 hours
+
+******************************************************************************/

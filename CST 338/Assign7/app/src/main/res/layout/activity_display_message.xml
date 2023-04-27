@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DisplayMessageActivity">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="77dp"
+        android:background="@color/purple_200"
+        android:contentDescription="@string/csumb_logo_white"
+        android:src="@drawable/csumb_logo_white" />
+
+    <TextView
+        android:id="@+id/tvCourseName"
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:background="@color/purple_200"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="@string/textview"
+        android:textColor="#DDDAC7" />
+
+    <TextView
+        android:id="@+id/tvCourseDescription"
+        android:layout_width="match_parent"
+        android:layout_height="630dp"
+        android:background="#DDDAC7"
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"
+        android:paddingRight="15dp"
+        android:text="@string/textview"
+        android:textColor="@color/purple_200" />
+
+</LinearLayout>

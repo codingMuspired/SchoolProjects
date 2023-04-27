@@ -1,0 +1,6 @@
+com/example/assign7/MainActivity.java
+ com.example.assign7.MainActivity
+com/example/assign7/DisplayMessageActivity.java
+ com.example.assign7.DisplayMessageActivity
+com/example/assign7/BuildConfig.java
+ com.example.assign7.BuildConfig
